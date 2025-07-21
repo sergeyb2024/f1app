@@ -46,7 +46,7 @@ export default function HomePage() { // Renamed to HomePage for clarity as it's 
     const [selectedUpdatedComponent, setSelectedUpdatedComponent] = useState('');
 
     // State to manage which accordion content is open
-    const [openAccordion, setOpenAccordion] = useState<string | null>(null);
+    const [openAccordion, setOpenAccordion] = useState<string | null>(null); // Corrected: Added type annotation for string | null
 
     // State to control visibility of the Details card
     const [showDetailsCard, setShowDetailsCard] = useState(false);
@@ -232,7 +232,7 @@ export default function HomePage() { // Renamed to HomePage for clarity as it's 
         "UpdatedComponent": "Front Wing",
         "PrimaryReason": "Circuit specific - Balance Range",
         "GeometricDifferences": "New front wing flap geometry.",
-        "Description": "The flap elements have been changed for smaller profiles, to cater for the low balance requirements of this and subsequent events."
+        "Description": "The flap elements has been changed for smaller profiles, to cater for the low balance requirements of this and subsequent events."
       },
       {
         "Year": 2025,
@@ -710,12 +710,7 @@ export default function HomePage() { // Renamed to HomePage for clarity as it's 
             geometricDifferences: '',
             description: ''
         });
-
-        if (selectedValue) {
-            toggleAccordion('team');
-        } else {
-            setOpenAccordion(null);
-        }
+        // Removed: automatic toggleAccordion('team');
     };
 
     // Handle constructor (team) selection change
@@ -730,12 +725,7 @@ export default function HomePage() { // Renamed to HomePage for clarity as it's 
             geometricDifferences: '',
             description: ''
         });
-
-        if (selectedValue) {
-            toggleAccordion('upgrades');
-        } else {
-            toggleAccordion('race');
-        }
+        // Removed: automatic toggleAccordion('upgrades');
     };
 
     // Handle updated component (upgrade) selection change
@@ -777,7 +767,7 @@ export default function HomePage() { // Renamed to HomePage for clarity as it's 
                 geometricDifferences: '',
                 description: ''
             });
-            toggleAccordion('team'); // Go back to team if upgrade is unselected
+            // Removed: automatic toggleAccordion('team');
         }
     };
 
@@ -851,12 +841,12 @@ export default function HomePage() { // Renamed to HomePage for clarity as it's 
     };
 
     // Function to handle clicking on a saved detail in the list
-    const handleViewSavedDetail = (item: SavedDetailItem) => { // Corrected: Explicitly typed 'item'
+    const handleViewSavedDetail = (item: SavedDetailItem) => {
         setDetailsData({
             updatedComponent: item.updatedComponent,
-            primaryReason: item.primaryReason,
-            geometricDifferences: item.geometricDifferences,
-            description: item.description
+            primaryReason: item.PrimaryReason, // Corrected from item.primaryReason to item.PrimaryReason based on upgradeData structure
+            geometricDifferences: item.GeometricDifferences, // Corrected
+            description: item.Description // Corrected
         });
         setSelectedRaceName(item.raceName || '');
         setSelectedConstructor(item.constructor || '');
@@ -916,7 +906,7 @@ export default function HomePage() { // Renamed to HomePage for clarity as it's 
                                 <span className="text-lg">Race Name</span>
                                 <span className="text-lg">{openAccordion === 'race' ? <>&#9650;</> : <>&#9660;</>}</span>
                             </div>
-                            <div className={`p-4 border-t border-gray-600 bg-gray-900 rounded-b-lg mx-4 ${openAccordion === 'race' ? 'active' : 'hidden'}`}>
+                            <div className={`accordion-content p-4 border-t border-gray-600 bg-gray-900 rounded-b-lg mx-4 ${openAccordion === 'race' ? 'active' : ''}`}>
                                 <select
                                     id="raceNameSelect"
                                     value={selectedRaceName}
@@ -945,7 +935,7 @@ export default function HomePage() { // Renamed to HomePage for clarity as it's 
                                     <span className="text-lg">Team Name</span>
                                     <span className="text-lg">{openAccordion === 'team' ? <>&#9650;</> : <>&#9660;</>}</span>
                                 </div>
-                                <div className={`p-4 border-t border-gray-600 bg-gray-900 rounded-b-lg mx-4 ${openAccordion === 'team' ? 'active' : 'hidden'}`}>
+                                <div className={`accordion-content p-4 border-t border-gray-600 bg-gray-900 rounded-b-lg mx-4 ${openAccordion === 'team' ? 'active' : ''}`}>
                                     <select
                                         id="teamNamesSelect"
                                         value={selectedConstructor}
@@ -975,7 +965,7 @@ export default function HomePage() { // Renamed to HomePage for clarity as it's 
                                     <span className="text-lg">Upgrade Name</span>
                                     <span className="text-lg">{openAccordion === 'upgrades' ? <>&#9650;</> : <>&#9660;</>}</span>
                                 </div>
-                                <div className={`p-4 border-t border-gray-600 bg-gray-900 rounded-b-lg mx-4 ${openAccordion === 'upgrades' ? 'active' : 'hidden'}`}>
+                                <div className={`accordion-content p-4 border-t border-gray-600 bg-gray-900 rounded-b-lg mx-4 ${openAccordion === 'upgrades' ? 'active' : ''}`}>
                                     <select
                                         id="upgradesNameSelect"
                                         value={selectedUpdatedComponent}
