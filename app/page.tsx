@@ -1,14 +1,16 @@
-import '../styles/globals.css';
+// app/page.tsx
+'use client'; // This directive is crucial for using React Hooks (useState, useEffect, useRef)
+
 import React, { useState, useEffect, useRef } from 'react';
 
-// Custom Alert Component
+// Custom Alert Component - Can be in this file or its own client component file (e.g., components/CustomAlert.tsx)
 const CustomAlert = ({ message, onClose }) => (
-    <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
-        <div className="bg-gray-800 text-white p-6 rounded-2xl shadow-2xl flex flex-col items-center gap-4 max-w-md w-full">
-            <p className="text-xl font-semibold text-blue-300">{message}</p>
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[1000]">
+        <div className="bg-green-600 text-white p-6 rounded-lg shadow-xl flex flex-col items-center gap-4 max-w-sm w-full">
+            <p className="text-lg font-semibold">{message}</p>
             <button
                 onClick={onClose}
-                className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg transition duration-300"
+                className="bg-green-700 hover:bg-green-800 text-white font-bold py-2 px-6 rounded-md transition duration-300"
             >
                 OK
             </button>
@@ -16,8 +18,8 @@ const CustomAlert = ({ message, onClose }) => (
     </div>
 );
 
-// Main App component
-const App = () => {
+// Main App component (previously 'App' in _app.js, now directly rendered as the page content)
+export default function HomePage() { // Renamed to HomePage for clarity as it's the page component
     // State for spoiler toggle and content visibility
     const [spoilerOn, setSpoilerOn] = useState(false);
 
@@ -69,7 +71,7 @@ const App = () => {
         { name: "Etihad Airways Abu Dhabi GP", circuit: "Yas Marina Circuit", raceDate: new Date("2025-12-07T08:00:00") },
     ];
 
-    // Upgrade Data (unchanged)
+    // Upgrade Data (from your previous request)
     const upgradeData = [
       {
         "Year": 2025,
@@ -824,7 +826,7 @@ const App = () => {
     const handleRemoveSavedDetail = (id) => {
         const initialLength = savedDetailsList.length;
         setSavedDetailsList(prevList => prevList.filter(item => item.id !== id));
-        if (savedDetailsList.length < initialLength) { // Check against the state *before* update
+        if (savedDetailsList.length < initialLength) {
             showAlert("Detail card removed successfully!");
         } else {
             showAlert("Could not find detail card to remove.");
@@ -851,56 +853,58 @@ const App = () => {
     const currentRace = raceSchedule[currentRaceIndex];
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 flex items-center justify-center p-4 font-inter text-gray-200">
-            <div className="container mx-auto p-6 bg-gray-950/95 rounded-2xl shadow-xl max-w-5xl">
+        <div className="min-h-screen bg-gradient-to-br from-gray-900 to-black flex items-center justify-center p-4 font-inter text-gray-200">
+            <div className="container mx-auto p-8 bg-zinc-900 rounded-xl shadow-2xl border-t-4 border-blue-600 max-w-4xl">
                 {/* Header Section */}
-                <div className="flex justify-between items-center mb-6 pb-4 border-b border-gray-700/50">
-                    <div className="p-2 rounded-lg bg-gray-800/90 border border-gray-700/50">
-                        <span className="font-bold text-2xl text-blue-400 tracking-tight">RACE.APP</span>
+                <div className="flex justify-between items-center mb-8 pb-4 border-b border-gray-700">
+                    <div className="p-3 rounded-lg bg-gray-800 border border-gray-700 shadow-md">
+                        <span className="font-extrabold text-2xl text-blue-500 tracking-wider">RACE.APP</span>
                     </div>
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-4">
                         <button
                             onClick={() => setShowSavedDetailsView(true)}
-                            className="p-2 rounded-lg bg-gray-800/90 border border-gray-700/50 hover:bg-gray-700/90 transition duration-300"
+                            className="p-3 rounded-lg bg-gray-800 border border-gray-700 shadow-md cursor-pointer hover:bg-gray-700 transition duration-300"
                         >
-                            <span className="font-semibold text-lg text-amber-400">SAVED ({savedDetailsList.length})</span>
+                            <span className="font-bold text-lg text-amber-400">SAVED ({savedDetailsList.length})</span>
                         </button>
                     </div>
                 </div>
 
                 {/* Next Race Section */}
-                <div className="mb-8 text-center md:text-left">
-                    <p className="text-2xl text-gray-100 font-semibold">
-                        Next Race: <span className="text-blue-400 font-bold">{currentRace.name}</span> In
-                        <span className="text-red-400 font-bold"> {countdown.days}</span> days,
-                        <span className="text-red-400 font-bold"> {countdown.hours}</span> hours,
-                        <span className="text-red-400 font-bold"> {countdown.minutes}</span> minutes
+                <div className="mb-10 text-center md:text-left">
+                    <p className="text-2xl text-gray-100">
+                        Next Race: <span className="text-orange-500 font-bold">{currentRace.name}</span> In
+                        <span className="text-red-500 font-extrabold"> {countdown.days}</span> days,
+                        <span className="text-red-500 font-extrabold"> {countdown.hours}</span> hours,
+                        <span className="text-red-500 font-extrabold"> {countdown.minutes}</span> minutes
                     </p>
-                    <p className="text-lg text-gray-400 mt-1">
-                        Circuit: <span className="font-medium">{currentRace.circuit}</span>
+                    <p className="text-lg text-gray-300">
+                        Circuit: {currentRace.circuit}
                     </p>
                 </div>
 
                 {/* Accordion Dropdowns Section */}
                 {!showSavedDetailsView && (
-                    <div className="mb-8 space-y-4">
+                    <div className="mb-10">
                         {/* RaceName Accordion */}
-                        <div>
+                        <div className="mb-3">
                             <div
                                 id="raceHeader"
                                 ref={raceHeaderRef}
-                                className="flex justify-between items-center p-4 cursor-pointer bg-gray-800/80 rounded-xl hover:bg-gray-700/80 transition duration-300"
+                                className="accordion-header flex justify-between items-center p-4 cursor-pointer bg-gray-700 font-bold text-blue-400
+                                       rounded-full mx-4 shadow-inner
+                                       hover:bg-gray-600 hover:translate-y-[-3px] hover:shadow-xl transition-all duration-300 ease-in-out"
                                 onClick={() => toggleAccordion('race')}
                             >
-                                <span className="text-lg font-semibold text-blue-300">Race Name</span>
-                                <span className="text-lg text-gray-400">{openAccordion === 'race' ? '▲' : '▼'}</span>
+                                <span className="text-lg">Race Name</span>
+                                <span className="text-lg">{openAccordion === 'race' ? <>&#9650;</> : <>&#9660;</>}</span>
                             </div>
-                            <div className={`p-4 bg-gray-900/90 rounded-b-xl ${openAccordion === 'race' ? 'block' : 'hidden'}`}>
+                            <div className={`p-4 border-t border-gray-600 bg-gray-900 rounded-b-lg mx-4 ${openAccordion === 'race' ? 'active' : 'hidden'}`}>
                                 <select
                                     id="raceNameSelect"
                                     value={selectedRaceName}
                                     onChange={handleRaceNameChange}
-                                    className="w-full bg-gray-800 text-gray-200 border border-gray-600/50 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
+                                    className="w-full bg-gray-900 text-gray-200 border border-gray-600 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
                                 >
                                     <option value="" disabled>Select a Race Name</option>
                                     {getRaceNames().map((raceName) => (
@@ -912,22 +916,24 @@ const App = () => {
 
                         {/* TeamNames Accordion */}
                         {selectedRaceName && (
-                            <div>
+                            <div className="mb-3">
                                 <div
                                     id="teamHeader"
                                     ref={teamHeaderRef}
-                                    className="flex justify-between items-center p-4 cursor-pointer bg-gray-800/80 rounded-xl hover:bg-gray-700/80 transition duration-300"
+                                    className="accordion-header flex justify-between items-center p-4 cursor-pointer bg-gray-700 font-bold text-blue-400
+                                           rounded-full mx-4 shadow-inner
+                                           hover:bg-gray-600 hover:translate-y-[-3px] hover:shadow-xl transition-all duration-300 ease-in-out"
                                     onClick={() => toggleAccordion('team')}
                                 >
-                                    <span className="text-lg font-semibold text-blue-300">Team Name</span>
-                                    <span className="text-lg text-gray-400">{openAccordion === 'team' ? '▲' : '▼'}</span>
+                                    <span className="text-lg">Team Name</span>
+                                    <span className="text-lg">{openAccordion === 'team' ? <>&#9650;</> : <>&#9660;</>}</span>
                                 </div>
-                                <div className={`p-4 bg-gray-900/90 rounded-b-xl ${openAccordion === 'team' ? 'block' : 'hidden'}`}>
+                                <div className={`p-4 border-t border-gray-600 bg-gray-900 rounded-b-lg mx-4 ${openAccordion === 'team' ? 'active' : 'hidden'}`}>
                                     <select
                                         id="teamNamesSelect"
                                         value={selectedConstructor}
                                         onChange={handleConstructorChange}
-                                        className="w-full bg-gray-800 text-gray-200 border border-gray-600/50 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
+                                        className="w-full bg-gray-900 text-gray-200 border border-gray-600 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
                                     >
                                         <option value="" disabled>Select a Team Name</option>
                                         {getConstructors().map((constructor) => (
@@ -940,22 +946,24 @@ const App = () => {
 
                         {/* UpgradesName Accordion */}
                         {selectedConstructor && (
-                            <div>
+                            <div className="mb-3">
                                 <div
                                     id="upgradesHeader"
                                     ref={upgradesHeaderRef}
-                                    className="flex justify-between items-center p-4 cursor-pointer bg-gray-800/80 rounded-xl hover:bg-gray-700/80 transition duration-300"
+                                    className="accordion-header flex justify-between items-center p-4 cursor-pointer bg-gray-700 font-bold text-blue-400
+                                           rounded-full mx-4 shadow-inner
+                                           hover:bg-gray-600 hover:translate-y-[-3px] hover:shadow-xl transition-all duration-300 ease-in-out"
                                     onClick={() => toggleAccordion('upgrades')}
                                 >
-                                    <span className="text-lg font-semibold text-blue-300">Upgrade Name</span>
-                                    <span className="text-lg text-gray-400">{openAccordion === 'upgrades' ? '▲' : '▼'}</span>
+                                    <span className="text-lg">Upgrade Name</span>
+                                    <span className="text-lg">{openAccordion === 'upgrades' ? <>&#9650;</> : <>&#9660;</>}</span>
                                 </div>
-                                <div className={`p-4 bg-gray-900/90 rounded-b-xl ${openAccordion === 'upgrades' ? 'block' : 'hidden'}`}>
+                                <div className={`p-4 border-t border-gray-600 bg-gray-900 rounded-b-lg mx-4 ${openAccordion === 'upgrades' ? 'active' : 'hidden'}`}>
                                     <select
                                         id="upgradesNameSelect"
                                         value={selectedUpdatedComponent}
                                         onChange={handleUpdatedComponentChange}
-                                        className="w-full bg-gray-800 text-gray-200 border border-gray-600/50 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
+                                        className="w-full bg-gray-900 text-gray-200 border border-gray-600 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
                                     >
                                         <option value="" disabled>Select an Upgrade</option>
                                         {getUpdatedComponents().map((component) => (
@@ -968,15 +976,15 @@ const App = () => {
                     </div>
                 )}
 
-                {/* Details and Spoilers Section */}
+                {/* Details and Spoilers Section - Conditionally rendered */}
                 {showDetailsCard && !showSavedDetailsView && (
-                    <div className="mb-8">
-                        <div className="relative bg-gray-800/90 border border-gray-700/50 p-6 rounded-2xl shadow-lg">
+                    <div className="flex flex-col md:flex-row gap-8 mb-8">
+                        <div className="relative flex-1 bg-gray-800 border border-gray-700 p-8 rounded-xl shadow-lg">
                             <h3 className="font-bold text-2xl mb-4 text-white">Details</h3>
 
-                            {/* Spoilers Switch */}
-                            <div className="absolute top-4 right-4 flex items-center gap-2">
-                                <span className="font-medium text-sm text-gray-300">Spoilers</span>
+                            {/* Spoilers Switch integrated into the top right of Details */}
+                            <div className="absolute top-6 right-6 flex items-center gap-3">
+                                <span className="font-semibold text-sm text-gray-300">Spoilers Switch</span>
                                 <label htmlFor="spoilerToggle" className="relative inline-flex items-center cursor-pointer">
                                     <input
                                         type="checkbox"
@@ -985,29 +993,27 @@ const App = () => {
                                         checked={spoilerOn}
                                         onChange={() => setSpoilerOn(!spoilerOn)}
                                     />
-                                    <div className="w-10 h-5 bg-gray-600 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-500 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
+                                    <div className="w-11 h-6 bg-gray-600 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-500 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
                                 </label>
                             </div>
 
-                            <div className="space-y-3">
-                                <p className="text-gray-300"><span className="font-semibold text-white">Part Name:</span> {detailsData.updatedComponent}</p>
-                                <p className="text-gray-300"><span className="font-semibold text-white">Reason for Upgrade:</span> {detailsData.primaryReason}</p>
-                                <p className="text-gray-300"><span className="font-semibold text-white">Geometric Differences:</span> {detailsData.geometricDifferences}</p>
-                                <p className="text-gray-300"><span className="font-semibold text-white">Description:</span> {detailsData.description}</p>
-                            </div>
+                            <p className="mb-3 text-gray-300"><span className="font-semibold text-white">Part Name:</span> {detailsData.updatedComponent}</p>
+                            <p className="mb-3 text-gray-300"><span className="font-semibold text-white">Reason for upgrade:</span> {detailsData.primaryReason}</p>
+                            <p className="mb-3 text-gray-300"><span className="font-semibold text-white">Geometric Differences:</span> {detailsData.geometricDifferences}</p>
+                            <p className="text-gray-300"><span className="font-semibold text-white">Description:</span> {detailsData.description}</p>
 
                             <button
                                 onClick={handleSaveDetail}
-                                className="mt-6 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-300 font-semibold"
+                                className="mt-8 px-8 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-300 shadow-xl font-bold tracking-wide"
                             >
-                                Save Detail Card <span className="ml-2">✔</span>
+                                Save Detail Card <span className="ml-2 text-lg">&#10003;</span>
                             </button>
 
-                            {/* Spoiler Content */}
+                            {/* Spoiler Content related to the switch, positioned below the details */}
                             {spoilerOn && (
-                                <div className="mt-6 bg-gray-900/90 border border-gray-700/50 p-4 rounded-xl">
-                                    <p className="font-semibold text-lg text-red-400 mb-2">Best Qualifiers</p>
-                                    <p className="font-bold text-xl text-red-500">Winner: Max Verstappen</p>
+                                <div className="text-center bg-gray-900 border border-gray-700 p-5 rounded-lg mt-8 shadow-inner">
+                                    <p className="font-bold text-lg text-red-400 mb-2">(Best qualifiers name)</p>
+                                    <p className="font-bold text-xl text-red-500">Winner Name: Max Verstappen</p>
                                 </div>
                             )}
                         </div>
@@ -1016,16 +1022,17 @@ const App = () => {
 
                 {/* Saved Details View */}
                 {showSavedDetailsView && (
-                    <div className="bg-gray-800/90 border border-gray-700/50 p-6 rounded-2xl shadow-lg w-full">
+                    <div className="bg-zinc-800 border border-zinc-700 p-8 rounded-xl shadow-2xl w-full max-w-4xl mx-auto">
                         <h3 className="font-bold text-2xl mb-6 text-white text-center">Your Saved Details</h3>
                         {savedDetailsList.length === 0 ? (
                             <p className="text-gray-400 text-center">No details saved yet.</p>
                         ) : (
-                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                                 {savedDetailsList.map((item) => (
                                     <div
                                         key={item.id}
-                                        className="bg-gray-700/80 border border-gray-600/50 p-4 rounded-xl hover:bg-gray-600/80 hover:scale-105 transition-all duration-200 relative"
+                                        className="bg-gray-700 border border-gray-600 p-5 rounded-lg shadow-md cursor-pointer
+                                                   hover:bg-gray-600 hover:scale-105 transition-all duration-200 ease-in-out relative"
                                     >
                                         <p className="font-semibold text-blue-300 text-lg mb-2" onClick={() => handleViewSavedDetail(item)}>{item.updatedComponent}</p>
                                         <p className="text-sm text-gray-300" onClick={() => handleViewSavedDetail(item)}>Race: {item.raceName}</p>
@@ -1033,9 +1040,9 @@ const App = () => {
                                         <p className="text-sm text-gray-400 mt-2 line-clamp-3" onClick={() => handleViewSavedDetail(item)}>{item.description}</p>
                                         <button
                                             onClick={(e) => { e.stopPropagation(); handleRemoveSavedDetail(item.id); }}
-                                            className="absolute top-2 right-2 bg-red-600 hover:bg-red-700 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-semibold"
+                                            className="absolute top-2 right-2 bg-red-600 hover:bg-red-700 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold"
                                         >
-                                            ✕
+                                            X
                                         </button>
                                     </div>
                                 ))}
@@ -1043,7 +1050,7 @@ const App = () => {
                         )}
                         <button
                             onClick={() => setShowSavedDetailsView(false)}
-                            className="mt-6 px-6 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition duration-300 font-semibold mx-auto block"
+                            className="mt-8 px-8 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition duration-300 shadow-lg font-bold mx-auto block"
                         >
                             Back to Main
                         </button>
@@ -1054,6 +1061,4 @@ const App = () => {
             </div>
         </div>
     );
-};
-
-export default App;
+}
