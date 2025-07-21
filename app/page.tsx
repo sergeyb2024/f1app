@@ -45,8 +45,8 @@ export default function HomePage() { // Renamed to HomePage for clarity as it's 
     const [selectedConstructor, setSelectedConstructor] = useState('');
     const [selectedUpdatedComponent, setSelectedUpdatedComponent] = useState('');
 
-    // State to manage which accordion content is open
-    const [openAccordion, setOpenAccordion] = useState<string | null>(null); // Corrected: Added type annotation for string | null
+    // State to manage which accordion content is open (no longer used for accordions, but kept for consistency if needed for other UI elements)
+    const [openAccordion, setOpenAccordion] = useState<string | null>(null);
 
     // State to control visibility of the Details card
     const [showDetailsCard, setShowDetailsCard] = useState(false);
@@ -60,14 +60,14 @@ export default function HomePage() { // Renamed to HomePage for clarity as it's 
     });
 
     // State for in-memory saved details
-    const [savedDetailsList, setSavedDetailsList] = useState<SavedDetailItem[]>([]); // Corrected: Explicitly typed as SavedDetailItem[]
+    const [savedDetailsList, setSavedDetailsList] = useState<SavedDetailItem[]>([]);
     // State to control visibility of the saved details view
     const [showSavedDetailsView, setShowSavedDetailsView] = useState(false);
 
     // State for custom alert message
     const [alertMessage, setAlertMessage] = useState<string | null>(null);
 
-    // Refs for accordion headers to manage arrow icons
+    // Refs for accordion headers are no longer needed for dropdowns, but kept if other accordion-like elements are added
     const raceHeaderRef = useRef<HTMLDivElement>(null);
     const teamHeaderRef = useRef<HTMLDivElement>(null);
     const upgradesHeaderRef = useRef<HTMLDivElement>(null);
@@ -677,30 +677,17 @@ export default function HomePage() { // Renamed to HomePage for clarity as it's 
         setAlertMessage(null);
     };
 
-    // Function to toggle accordion visibility and icon
+    // Function to toggle accordion visibility and icon (No longer used for dropdowns)
     const toggleAccordion = (accordionId: string) => {
         setOpenAccordion(prev => (prev === accordionId ? null : accordionId));
-
-        // Manually update arrow icons using refs
-        const headers = [raceHeaderRef, teamHeaderRef, upgradesHeaderRef];
-        headers.forEach(ref => {
-            if (ref.current) {
-                const arrowSpan = ref.current.querySelector('span:last-child');
-                if (arrowSpan) {
-                    if (ref.current.id === `${accordionId}Header` && openAccordion !== accordionId) {
-                        arrowSpan.innerHTML = '&#9650;'; // Up arrow
-                    } else {
-                        arrowSpan.innerHTML = '&#9660;'; // Down arrow
-                    }
-                }
-            }
-        });
+        // Arrow icon logic is removed as accordions are no longer used for dropdowns
     };
 
     // Handle race name selection change
     const handleRaceNameChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const selectedValue = e.target.value;
         setSelectedRaceName(selectedValue);
+        // Reset dependent selections and details
         setSelectedConstructor('');
         setSelectedUpdatedComponent('');
         setShowDetailsCard(false);
@@ -710,13 +697,13 @@ export default function HomePage() { // Renamed to HomePage for clarity as it's 
             geometricDifferences: '',
             description: ''
         });
-        // Removed: automatic toggleAccordion('team');
     };
 
     // Handle constructor (team) selection change
     const handleConstructorChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const selectedValue = e.target.value;
         setSelectedConstructor(selectedValue);
+        // Reset dependent selections and details
         setSelectedUpdatedComponent('');
         setShowDetailsCard(false);
         setDetailsData({
@@ -725,7 +712,6 @@ export default function HomePage() { // Renamed to HomePage for clarity as it's 
             geometricDifferences: '',
             description: ''
         });
-        // Removed: automatic toggleAccordion('upgrades');
     };
 
     // Handle updated component (upgrade) selection change
@@ -758,7 +744,6 @@ export default function HomePage() { // Renamed to HomePage for clarity as it's 
                     description: ''
                 });
             }
-            setOpenAccordion(null); // Close accordions after final selection
         } else {
             setShowDetailsCard(false);
             setDetailsData({
@@ -767,7 +752,6 @@ export default function HomePage() { // Renamed to HomePage for clarity as it's 
                 geometricDifferences: '',
                 description: ''
             });
-            // Removed: automatic toggleAccordion('team');
         }
     };
 
@@ -827,7 +811,6 @@ export default function HomePage() { // Renamed to HomePage for clarity as it's 
         setSelectedUpdatedComponent('');
         setDetailsData({ updatedComponent: '', primaryReason: '', geometricDifferences: '', description: '' });
         setShowDetailsCard(false);
-        setOpenAccordion(null); // Close all accordions
     };
 
     const handleRemoveSavedDetail = (id: number) => {
@@ -842,18 +825,21 @@ export default function HomePage() { // Renamed to HomePage for clarity as it's 
 
     // Function to handle clicking on a saved detail in the list
     const handleViewSavedDetail = (item: SavedDetailItem) => {
+        // Note: The upgradeData uses PascalCase for keys (PrimaryReason, GeometricDifferences, Description)
+        // while savedDetailsList uses camelCase (primaryReason, geometricDifferences, description).
+        // Ensure consistency or map appropriately. Here, I'm mapping from SavedDetailItem (camelCase)
+        // to detailsData (camelCase), assuming SavedDetailItem stored data correctly.
         setDetailsData({
             updatedComponent: item.updatedComponent,
-            primaryReason: item.PrimaryReason, // Corrected from item.primaryReason to item.PrimaryReason based on upgradeData structure
-            geometricDifferences: item.GeometricDifferences, // Corrected
-            description: item.Description // Corrected
+            primaryReason: item.primaryReason,
+            geometricDifferences: item.geometricDifferences,
+            description: item.description
         });
         setSelectedRaceName(item.raceName || '');
         setSelectedConstructor(item.constructor || '');
         setSelectedUpdatedComponent(item.updatedComponent || '');
         setShowDetailsCard(true);
         setShowSavedDetailsView(false); // Hide the list of saved details
-        setOpenAccordion(null); // Close any open accordions
     };
 
     // Get current race details
@@ -890,94 +876,58 @@ export default function HomePage() { // Renamed to HomePage for clarity as it's 
                     </p>
                 </div>
 
-                {/* Accordion Dropdowns Section */}
+                {/* Dropdowns Section - Now simplified without accordion headers */}
                 {!showSavedDetailsView && (
-                    <div className="mb-10">
-                        {/* RaceName Accordion */}
-                        <div className="mb-3">
-                            <div
-                                id="raceHeader"
-                                ref={raceHeaderRef}
-                                className="accordion-header flex justify-between items-center p-4 cursor-pointer bg-gray-700 font-bold text-blue-400
-                                       rounded-full mx-4 shadow-inner
-                                       hover:bg-gray-600 hover:translate-y-[-3px] hover:shadow-xl transition-all duration-300 ease-in-out"
-                                onClick={() => toggleAccordion('race')}
+                    <div className="mb-10 space-y-4"> {/* Added space-y for vertical spacing */}
+                        {/* Race Name Dropdown */}
+                        <div className="bg-gray-800 p-4 rounded-lg shadow-md border border-gray-700">
+                            <label htmlFor="raceNameSelect" className="block text-lg font-bold text-blue-400 mb-2">Race Name</label>
+                            <select
+                                id="raceNameSelect"
+                                value={selectedRaceName}
+                                onChange={handleRaceNameChange}
+                                className="w-full bg-gray-900 text-gray-200 border border-gray-600 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
                             >
-                                <span className="text-lg">Race Name</span>
-                                <span className="text-lg">{openAccordion === 'race' ? <>&#9650;</> : <>&#9660;</>}</span>
-                            </div>
-                            <div className={`accordion-content p-4 border-t border-gray-600 bg-gray-900 rounded-b-lg mx-4 ${openAccordion === 'race' ? 'active' : ''}`}>
+                                <option value="" disabled>Select a Race Name</option>
+                                {getRaceNames().map((raceName) => (
+                                    <option key={raceName} value={raceName}>{raceName}</option>
+                                ))}
+                            </select>
+                        </div>
+
+                        {/* Team Name Dropdown - Conditionally rendered */}
+                        {selectedRaceName && (
+                            <div className="bg-gray-800 p-4 rounded-lg shadow-md border border-gray-700">
+                                <label htmlFor="teamNamesSelect" className="block text-lg font-bold text-blue-400 mb-2">Team Name</label>
                                 <select
-                                    id="raceNameSelect"
-                                    value={selectedRaceName}
-                                    onChange={handleRaceNameChange}
+                                    id="teamNamesSelect"
+                                    value={selectedConstructor}
+                                    onChange={handleConstructorChange}
                                     className="w-full bg-gray-900 text-gray-200 border border-gray-600 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
                                 >
-                                    <option value="" disabled>Select a Race Name</option>
-                                    {getRaceNames().map((raceName) => (
-                                        <option key={raceName} value={raceName}>{raceName}</option>
+                                    <option value="" disabled>Select a Team Name</option>
+                                    {getConstructors().map((constructor) => (
+                                        <option key={constructor} value={constructor}>{constructor}</option>
                                     ))}
                                 </select>
                             </div>
-                        </div>
-
-                        {/* TeamNames Accordion */}
-                        {selectedRaceName && (
-                            <div className="mb-3">
-                                <div
-                                    id="teamHeader"
-                                    ref={teamHeaderRef}
-                                    className="accordion-header flex justify-between items-center p-4 cursor-pointer bg-gray-700 font-bold text-blue-400
-                                           rounded-full mx-4 shadow-inner
-                                           hover:bg-gray-600 hover:translate-y-[-3px] hover:shadow-xl transition-all duration-300 ease-in-out"
-                                    onClick={() => toggleAccordion('team')}
-                                >
-                                    <span className="text-lg">Team Name</span>
-                                    <span className="text-lg">{openAccordion === 'team' ? <>&#9650;</> : <>&#9660;</>}</span>
-                                </div>
-                                <div className={`accordion-content p-4 border-t border-gray-600 bg-gray-900 rounded-b-lg mx-4 ${openAccordion === 'team' ? 'active' : ''}`}>
-                                    <select
-                                        id="teamNamesSelect"
-                                        value={selectedConstructor}
-                                        onChange={handleConstructorChange}
-                                        className="w-full bg-gray-900 text-gray-200 border border-gray-600 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
-                                    >
-                                        <option value="" disabled>Select a Team Name</option>
-                                        {getConstructors().map((constructor) => (
-                                            <option key={constructor} value={constructor}>{constructor}</option>
-                                        ))}
-                                    </select>
-                                </div>
-                            </div>
                         )}
 
-                        {/* UpgradesName Accordion */}
+                        {/* Upgrade Name Dropdown - Conditionally rendered */}
                         {selectedConstructor && (
-                            <div className="mb-3">
-                                <div
-                                    id="upgradesHeader"
-                                    ref={upgradesHeaderRef}
-                                    className="accordion-header flex justify-between items-center p-4 cursor-pointer bg-gray-700 font-bold text-blue-400
-                                           rounded-full mx-4 shadow-inner
-                                           hover:bg-gray-600 hover:translate-y-[-3px] hover:shadow-xl transition-all duration-300 ease-in-out"
-                                    onClick={() => toggleAccordion('upgrades')}
+                            <div className="bg-gray-800 p-4 rounded-lg shadow-md border border-gray-700">
+                                <label htmlFor="upgradesNameSelect" className="block text-lg font-bold text-blue-400 mb-2">Upgrade Name</label>
+                                <select
+                                    id="upgradesNameSelect"
+                                    value={selectedUpdatedComponent}
+                                    onChange={handleUpdatedComponentChange}
+                                    className="w-full bg-gray-900 text-gray-200 border border-gray-600 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
                                 >
-                                    <span className="text-lg">Upgrade Name</span>
-                                    <span className="text-lg">{openAccordion === 'upgrades' ? <>&#9650;</> : <>&#9660;</>}</span>
-                                </div>
-                                <div className={`accordion-content p-4 border-t border-gray-600 bg-gray-900 rounded-b-lg mx-4 ${openAccordion === 'upgrades' ? 'active' : ''}`}>
-                                    <select
-                                        id="upgradesNameSelect"
-                                        value={selectedUpdatedComponent}
-                                        onChange={handleUpdatedComponentChange}
-                                        className="w-full bg-gray-900 text-gray-200 border border-gray-600 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
-                                    >
-                                        <option value="" disabled>Select an Upgrade</option>
-                                        {getUpdatedComponents().map((component) => (
-                                            <option key={component} value={component}>{component}</option>
-                                        ))}
-                                    </select>
-                                </div>
+                                    <option value="" disabled>Select an Upgrade</option>
+                                    {getUpdatedComponents().map((component) => (
+                                        <option key={component} value={component}>{component}</option>
+                                    ))}
+                                </select>
                             </div>
                         )}
                     </div>
