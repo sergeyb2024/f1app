@@ -24,6 +24,17 @@ const CustomAlert: React.FC<CustomAlertProps> = ({ message, onClose }) => (
     </div>
 );
 
+// Define a type for saved items to ensure type safety
+interface SavedDetailItem {
+    id: number;
+    updatedComponent: string;
+    primaryReason: string;
+    geometricDifferences: string;
+    description: string;
+    raceName: string;
+    constructor: string;
+}
+
 // Main App component (previously 'App' in _app.js, now directly rendered as the page content)
 export default function HomePage() { // Renamed to HomePage for clarity as it's the page component
     // State for spoiler toggle and content visibility
@@ -35,7 +46,7 @@ export default function HomePage() { // Renamed to HomePage for clarity as it's 
     const [selectedUpdatedComponent, setSelectedUpdatedComponent] = useState('');
 
     // State to manage which accordion content is open
-    const [openAccordion, setOpenAccordion] = useState<string | null>(null); // Corrected: Added type annotation for string | null
+    const [openAccordion, setOpenAccordion] = useState<string | null>(null);
 
     // State to control visibility of the Details card
     const [showDetailsCard, setShowDetailsCard] = useState(false);
@@ -49,12 +60,12 @@ export default function HomePage() { // Renamed to HomePage for clarity as it's 
     });
 
     // State for in-memory saved details
-    const [savedDetailsList, setSavedDetailsList] = useState([]);
+    const [savedDetailsList, setSavedDetailsList] = useState<SavedDetailItem[]>([]); // Corrected: Explicitly typed as SavedDetailItem[]
     // State to control visibility of the saved details view
     const [showSavedDetailsView, setShowSavedDetailsView] = useState(false);
 
     // State for custom alert message
-    const [alertMessage, setAlertMessage] = useState<string | null>(null); // Corrected: Added type annotation for string | null
+    const [alertMessage, setAlertMessage] = useState<string | null>(null);
 
     // Refs for accordion headers to manage arrow icons
     const raceHeaderRef = useRef<HTMLDivElement>(null);
@@ -797,17 +808,6 @@ export default function HomePage() { // Renamed to HomePage for clarity as it's 
             return;
         }
 
-        // Define a type for saved items to ensure type safety
-        interface SavedDetailItem {
-            id: number;
-            updatedComponent: string;
-            primaryReason: string;
-            geometricDifferences: string;
-            description: string;
-            raceName: string;
-            constructor: string;
-        }
-
         // Check for duplicates
         const isDuplicate = savedDetailsList.some((item: SavedDetailItem) =>
             item.raceName === selectedRaceName &&
@@ -851,7 +851,7 @@ export default function HomePage() { // Renamed to HomePage for clarity as it's 
     };
 
     // Function to handle clicking on a saved detail in the list
-    const handleViewSavedDetail = (item: any) => { // Using 'any' for simplicity here, but a specific type for 'item' would be better
+    const handleViewSavedDetail = (item: SavedDetailItem) => { // Corrected: Explicitly typed 'item'
         setDetailsData({
             updatedComponent: item.updatedComponent,
             primaryReason: item.primaryReason,
