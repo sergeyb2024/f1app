@@ -3,8 +3,14 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 
+// Define types for CustomAlert props
+interface CustomAlertProps {
+    message: string;
+    onClose: () => void; // onClose is a function that takes no arguments and returns nothing
+}
+
 // Custom Alert Component - Can be in this file or its own client component file (e.g., components/CustomAlert.tsx)
-const CustomAlert = ({ message, onClose }) => (
+const CustomAlert: React.FC<CustomAlertProps> = ({ message, onClose }) => (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[1000]">
         <div className="bg-green-600 text-white p-6 rounded-lg shadow-xl flex flex-col items-center gap-4 max-w-sm w-full">
             <p className="text-lg font-semibold">{message}</p>
