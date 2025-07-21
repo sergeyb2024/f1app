@@ -35,7 +35,7 @@ export default function HomePage() { // Renamed to HomePage for clarity as it's 
     const [selectedUpdatedComponent, setSelectedUpdatedComponent] = useState('');
 
     // State to manage which accordion content is open
-    const [openAccordion, setOpenAccordion] = useState(null);
+    const [openAccordion, setOpenAccordion] = useState<string | null>(null); // Corrected: Added type annotation for string | null
 
     // State to control visibility of the Details card
     const [showDetailsCard, setShowDetailsCard] = useState(false);
@@ -54,7 +54,7 @@ export default function HomePage() { // Renamed to HomePage for clarity as it's 
     const [showSavedDetailsView, setShowSavedDetailsView] = useState(false);
 
     // State for custom alert message
-    const [alertMessage, setAlertMessage] = useState(null);
+    const [alertMessage, setAlertMessage] = useState<string | null>(null); // Corrected: Added type annotation for string | null
 
     // Refs for accordion headers to manage arrow icons
     const raceHeaderRef = useRef<HTMLDivElement>(null);
@@ -626,7 +626,7 @@ export default function HomePage() { // Renamed to HomePage for clarity as it's 
     const [countdown, setCountdown] = useState({ days: 0, hours: 0, minutes: 0 });
 
     // Function to calculate countdown
-    const calculateCountdown = (targetDate: Date) => { // Added type annotation here
+    const calculateCountdown = (targetDate: Date) => {
         const now = new Date().getTime();
         const distance = targetDate.getTime() - now;
 
@@ -657,7 +657,7 @@ export default function HomePage() { // Renamed to HomePage for clarity as it's 
     }, [currentRaceIndex, raceSchedule]);
 
     // Function to show custom alert
-    const showAlert = (message: string) => { // Added type annotation here
+    const showAlert = (message: string) => {
         setAlertMessage(message);
     };
 
@@ -667,7 +667,7 @@ export default function HomePage() { // Renamed to HomePage for clarity as it's 
     };
 
     // Function to toggle accordion visibility and icon
-    const toggleAccordion = (accordionId: string) => { // Added type annotation here
+    const toggleAccordion = (accordionId: string) => {
         setOpenAccordion(prev => (prev === accordionId ? null : accordionId));
 
         // Manually update arrow icons using refs
@@ -687,7 +687,7 @@ export default function HomePage() { // Renamed to HomePage for clarity as it's 
     };
 
     // Handle race name selection change
-    const handleRaceNameChange = (e: React.ChangeEvent<HTMLSelectElement>) => { // Added type annotation here
+    const handleRaceNameChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const selectedValue = e.target.value;
         setSelectedRaceName(selectedValue);
         setSelectedConstructor('');
@@ -708,7 +708,7 @@ export default function HomePage() { // Renamed to HomePage for clarity as it's 
     };
 
     // Handle constructor (team) selection change
-    const handleConstructorChange = (e: React.ChangeEvent<HTMLSelectElement>) => { // Added type annotation here
+    const handleConstructorChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const selectedValue = e.target.value;
         setSelectedConstructor(selectedValue);
         setSelectedUpdatedComponent('');
@@ -728,7 +728,7 @@ export default function HomePage() { // Renamed to HomePage for clarity as it's 
     };
 
     // Handle updated component (upgrade) selection change
-    const handleUpdatedComponentChange = (e: React.ChangeEvent<HTMLSelectElement>) => { // Added type annotation here
+    const handleUpdatedComponentChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const selectedValue = e.target.value;
         setSelectedUpdatedComponent(selectedValue);
 
@@ -809,7 +809,7 @@ export default function HomePage() { // Renamed to HomePage for clarity as it's 
         }
 
         // Check for duplicates
-        const isDuplicate = savedDetailsList.some((item: SavedDetailItem) => // Added type annotation here
+        const isDuplicate = savedDetailsList.some((item: SavedDetailItem) =>
             item.raceName === selectedRaceName &&
             item.constructor === selectedConstructor &&
             item.updatedComponent === selectedUpdatedComponent
@@ -820,7 +820,7 @@ export default function HomePage() { // Renamed to HomePage for clarity as it's 
             return;
         }
 
-        const newSavedItem: SavedDetailItem = { // Added type annotation here
+        const newSavedItem: SavedDetailItem = {
             id: Date.now(), // Simple unique ID
             ...detailsData,
             raceName: selectedRaceName,
@@ -840,7 +840,7 @@ export default function HomePage() { // Renamed to HomePage for clarity as it's 
         setOpenAccordion(null); // Close all accordions
     };
 
-    const handleRemoveSavedDetail = (id: number) => { // Added type annotation here
+    const handleRemoveSavedDetail = (id: number) => {
         const initialLength = savedDetailsList.length;
         setSavedDetailsList(prevList => prevList.filter(item => item.id !== id));
         if (savedDetailsList.length < initialLength) {
