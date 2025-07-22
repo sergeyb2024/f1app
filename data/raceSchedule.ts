@@ -1,7 +1,7 @@
 import { Race } from '@/types';
 
 export const raceSchedule: Race[] = [
-   name: "Louis Vuitton Australian GP", circuit: "Melbourne Grand Prix Circuit", location: "Melbourne", raceDate: new Date("2025-03-16T12:00:00") },
+      { name: "Louis Vuitton Australian GP", circuit: "Melbourne Grand Prix Circuit", location: "Melbourne", raceDate: new Date("2025-03-16T12:00:00") },
       { name: "Heineken Chinese GP", circuit: "Shanghai International Circuit", location: "Shanghai", raceDate: new Date("2025-03-23T12:00:00") },
       { name: "Lenovo Japanese GP", circuit: "Suzuka International Racing Course", location: "Suzuka", raceDate: new Date("2025-04-06T12:00:00") },
       { name: "Gulf Air Bahrain GP", circuit: "Bahrain International Circuit", location: "Sakhir", raceDate: new Date("2025-04-13T12:00:00") },
