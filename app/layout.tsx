@@ -1,22 +1,25 @@
-// app/layout.tsx
-import './globals.css'; // Import your global CSS here
-import { Inter } from 'next/font/google'; // Import Inter font using Next.js font optimization
-import React from 'react'; // Import React to use React.ReactNode
+import './globals.css';
+import type { Metadata } from 'next';
+import { Inter } from 'next/font/google';
 
-// Initialize the Inter font
-const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
+const inter = Inter({ subsets: ['latin'] });
 
-export const metadata = {
-  title: 'Race App Dashboard',
-  description: 'Track race details and upgrades',
+export const metadata: Metadata = {
+  title: 'Race.App',
+  description: 'F1 Race Upgrade Tracker',
 };
 
-// Corrected: Type 'children' as React.ReactNode
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
-    <html lang="en" className={`${inter.variable}`}>
-      <body>
-        {children} {/* This is where your page.tsx content will be rendered */}
+    <html lang="en">
+      <body
+        className={`${inter.className} bg-gradient-to-br from-gray-900 to-black text-gray-200 min-h-screen`}
+      >
+        {children}
       </body>
     </html>
   );
