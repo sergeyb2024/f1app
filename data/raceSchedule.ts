@@ -26,3 +26,4 @@ export const raceSchedule: Race[] = [
       { name: "Qatar Airways Qatar GP", circuit: "Losail International Circuit", location: "Lusail", raceDate: new Date("2025-11-30T11:00:00") },
       { name: "Etihad Airways Abu Dhabi GP", circuit: "Yas Marina Circuit", location: "Yas Island", raceDate: new Date("2025-12-07T08:00:00") },
 ];
+
