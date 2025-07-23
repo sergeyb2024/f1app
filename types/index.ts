@@ -1,3 +1,8 @@
+// types/index.ts
+
+/**
+ * Represents a single race in the schedule.
+ */
 export interface Race {
   name: string;
   circuit: string;
@@ -5,6 +10,9 @@ export interface Race {
   raceDate: Date;
 }
 
+/**
+ * Represents a single upgrade component for a constructor.
+ */
 export interface Upgrade {
   Year: number;
   RaceNo: number;
@@ -18,15 +26,13 @@ export interface Upgrade {
   Description: string;
 }
 
+/**
+ * Represents a detail card that the user has saved.
+ */
 export interface SavedDetail {
   id: number;
   raceName: string;
   constructor: string;
   updatedComponent: string;
   description: string;
-}
-export interface RaceSelector {
-  selectedRace: string;
-  onRaceChange: (raceName: string) => void;
-  upgradeData: Upgrade[];
 }
