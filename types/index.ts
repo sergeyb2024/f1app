@@ -26,8 +26,7 @@ export interface SavedDetail {
   description: string;
 }
 export interface RaceSelector {
-  name: string;
-  circuit: string;
-  location: string;
-  raceDate: Date;
+  selectedRace: string;
+  onRaceChange: (raceName: string) => void;
+  upgradeData: Upgrade[];
 }
