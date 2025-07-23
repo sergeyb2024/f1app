@@ -25,3 +25,9 @@ export interface SavedDetail {
   updatedComponent: string;
   description: string;
 }
+export interface RaceSelector {
+  name: string;
+  circuit: string;
+  location: string;
+  raceDate: Date;
+}
