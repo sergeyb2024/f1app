@@ -1,21 +1,12 @@
-// components/Spoiler.tsx
+'use client';
 import React, { useState, useEffect } from 'react';
 
 interface SpoilerProps {
   location: string;
   raceDate: Date;
 }
-
-interface Finisher {
-  position: number;
-  name: string;
-  points: number | string;
-}
-
-interface SpoilerData {
-  poleSitter: { name: string };
-  finishers: Finisher[];
-}
+interface Finisher { position: number; name: string; points: number | string; }
+interface SpoilerData { poleSitter: { name: string }; finishers: Finisher[]; }
 
 const Spoiler: React.FC<SpoilerProps> = ({ location, raceDate }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -23,16 +14,12 @@ const Spoiler: React.FC<SpoilerProps> = ({ location, raceDate }) => {
   const [results, setResults] = useState<SpoilerData | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  // This effect will fetch the spoiler data when the toggle is flipped on.
   useEffect(() => {
-    // Only fetch if the spoiler is open, data hasn't been fetched yet, and a location is provided.
     if (isOpen && !results && location) {
       const fetchSpoilers = async () => {
         setIsLoading(true);
         setError(null);
         try {
-          // We use an internal API route. This is a best practice in Next.js
-          // to avoid exposing external API endpoints or keys to the client.
           const response = await fetch(`/api/race-results?location=${location}&raceDate=${raceDate.toISOString()}`);
           if (!response.ok) {
             const errorData = await response.json();
@@ -59,20 +46,12 @@ const Spoiler: React.FC<SpoilerProps> = ({ location, raceDate }) => {
         <label htmlFor="spoilerToggle" className="flex items-center cursor-pointer">
           <span className="mr-3 text-gray-300">Show Results</span>
           <div className="relative">
-            <input
-              type="checkbox"
-              id="spoilerToggle"
-              className="sr-only"
-              checked={isOpen}
-              onChange={() => setIsOpen(!isOpen)}
-            />
-            {/* The visual part of the toggle switch */}
+            <input type="checkbox" id="spoilerToggle" className="sr-only" checked={isOpen} onChange={() => setIsOpen(!isOpen)} />
             <div className="block bg-gray-600 w-14 h-8 rounded-full"></div>
             <div className={`dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition-transform ${isOpen ? 'translate-x-full bg-green-400' : ''}`}></div>
           </div>
         </label>
       </div>
-      {/* The content that expands/collapses */}
       <div className={`transition-all duration-300 ease-in-out overflow-hidden ${isOpen ? 'max-h-96 mt-4' : 'max-h-0'}`}>
         {isLoading && <p className="text-gray-300 animate-pulse">Loading spoiler data...</p>}
         {error && <p className="text-red-500">{error}</p>}
@@ -97,9 +76,7 @@ const Spoiler: React.FC<SpoilerProps> = ({ location, raceDate }) => {
                   ))}
                 </ul>
               </div>
-            ) : (
-                 <p className="text-gray-400">Podium data is not yet available.</p>
-            )}
+            ) : <p className="text-gray-400">Podium data is not yet available.</p>}
           </div>
         )}
       </div>
