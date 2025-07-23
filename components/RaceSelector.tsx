@@ -1,6 +1,6 @@
 import React from 'react';
 import { raceSchedule } from '@/data/raceSchedule';
-import { Upgrade } from '@/types';
+import { Upgrade, RaceSelector } from '@/types';
 
 interface RaceSelectorProps {
   selectedRace: string;
