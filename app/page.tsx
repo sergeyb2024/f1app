@@ -19,7 +19,10 @@ export default function Home() {
     <main className="container mx-auto p-4 sm:p-8 bg-zinc-900 rounded-xl shadow-2xl border-t-4 border-blue-600 max-w-4xl">
       <Header savedCount={savedCount} onShowSaved={handleShowSaved} />
       <Countdown />
-      {/* ... render other components and pass props as needed */}
+      <RaceSelector/>
+      <DetailsCard/>
+      <SavedDetails/>
+      <Spoiler/>
     </main>
   );
 }
