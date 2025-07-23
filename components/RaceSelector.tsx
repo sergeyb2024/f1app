@@ -1,6 +1,6 @@
 import React from 'react';
 import { raceSchedule } from '@/data/raceSchedule';
-import { Upgrade, RaceSelector } from '@/types';
+import { Upgrade } from '@/types';
 
 interface RaceSelectorProps {
   selectedRace: string;
@@ -9,13 +9,12 @@ interface RaceSelectorProps {
 }
 
 const RaceSelector: React.FC<RaceSelectorProps> = ({ selectedRace, onRaceChange, upgradeData }) => {
-  // Get a list of unique race names that have associated upgrade data.
   const availableRaces = raceSchedule.filter(race =>
     upgradeData.some(upgrade => upgrade.RaceName === race.name)
   );
 
   return (
-    <div className="bg-gray-800 p-4 rounded-lg shadow-md border border-gray-700 mb-4">
+    <div className="bg-gray-800 p-4 rounded-lg shadow-md border border-gray-700">
       <label htmlFor="raceNameSelect" className="block text-lg font-bold text-blue-400 mb-2">
         Race Name
       </label>
